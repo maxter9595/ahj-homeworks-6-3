@@ -10,7 +10,6 @@ const filesDir = path.join(__dirname, "src", "data", "files");
 app.use(cors({}));
 app.use(express.static(path.join(__dirname, "src")));
 
-// Эндпоинт для получения списка файлов
 app.get("/files", (req, res) => {
   fs.readdir(filesDir, (err, files) => {
     if (err) {
@@ -31,20 +30,14 @@ app.get("/files", (req, res) => {
   });
 });
 
-// Эндпоинт для получения конкретного файла
 app.get("/file/:filename", (req, res) => {
   const filePath = path.join(filesDir, req.params.filename);
-
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
       return res.status(500).send("File not found");
     }
-
-    // Устанавливаем правильный заголовок для PDF
     res.setHeader("Content-Type", "application/pdf");
-
-    // Отправляем файл как бинарные данные
     res.send(data);
   });
 });
