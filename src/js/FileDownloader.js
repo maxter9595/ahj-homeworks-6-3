@@ -13,7 +13,12 @@ class FileDownloader {
   }
 
   async loadFileData(file) {
+    console.log("Loading file data for:", file.name); // Логируем имя файла
     const response = await fetch(`${this.fileEndpoint}/${file.path}`);
+    if (!response.ok) {
+      console.error("Failed to load file:", response.statusText); // Логируем ошибку
+      throw new Error("Failed to load file");
+    }
     return await response.blob();
   }
 
@@ -57,6 +62,7 @@ class FileDownloader {
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = file.name;
+        console.log("Download link created:", link.href, link.download);
         link.click();
       });
 
